@@ -16,3 +16,28 @@ img {
   display: block;
   max-width: 100%;
 }
+
+.value {
+  font-family: 'Rubik Distressed', cursive;
+  font-size: 32px;
+}
+.label {
+  font-family: 'Silkscreen', cursive;
+  font-size: 26px;
+}
+.timer {
+  display: flex;
+  margin-top: 10px;
+}
+.field {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 140px;
+  background-image: linear-gradient(90deg, #fd7f34, #bd155b);
+  border-radius: 8px;
+}
+.field:not(:last-child) {
+  margin-right: 15px;
+}

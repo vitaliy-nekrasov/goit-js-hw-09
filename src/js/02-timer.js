@@ -1,5 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const refs = {
   inputEl: document.querySelector('input'),
@@ -21,7 +22,7 @@ const options = {
   onClose(selectedDates) {
     console.log(selectedDates[0]);
     if (selectedDates[0] < Date.now()) {
-      alert('"Please choose a date in the future"');
+      Notify.failure('Please choose a date in the future');
       startBtnEl.setAttribute('disabled', 'true');
     } else {
       startBtnEl.removeAttribute('disabled');
@@ -33,20 +34,23 @@ const options = {
         hoursEl.textContent = addLeadingZero(`${hours}`);
         minutesEl.textContent = addLeadingZero(`${minutes}`);
         secondsEl.textContent = addLeadingZero(`${seconds}`);
+
+        if (selectedDates[0] < Date.now()) {
+          clearInterval(options.intervalId);
+          options.intervalId = null;
+          timeToNull();
+        }
       }
 
       startBtnEl.addEventListener('click', onStartBtnClick);
 
       function onStartBtnClick() {
         options.intervalId = setInterval(getTime, 1000);
-      }
-      if (selectedDates[0].getTime() - Date.now() < 5000) {
-        clearInterval(options.intervalId);
+        startBtnEl.setAttribute('disabled', 'true');
       }
     }
   },
 };
-
 function convertMs(ms) {
   // Number of milliseconds per unit of time
   const second = 1000;
@@ -68,6 +72,13 @@ function convertMs(ms) {
 
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
+}
+
+function timeToNull() {
+  daysEl.textContent = '00';
+  hoursEl.textContent = '00';
+  minutesEl.textContent = '00';
+  secondsEl.textContent = '00';
 }
 
 flatpickr(inputEl, options);
